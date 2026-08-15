@@ -1,0 +1,9 @@
+{
+  "Title": "Introduction",
+  "Contents": [
+    {
+      "Title": "BEFORE ANYTHING!",
+      "Contents": "<h2>Welcome!</h2><p>Welcome to the Website Development course!</p><p>We would learn about the basics of creating websites using <strong>HTML, CSS, and JavaScript</strong>.</p><p>The goal of this course is to be able to build practical and functional web systems.</p><h3>What Will We Build?</h3><p>Throughout this course, we will learn the fundamentals needed to create systems such as:</p><h3>Login / Sign-In System</h3><p>We will learn how to create interfaces where users can log in and sign in.</p><img src=\"Login.png\" alt=\"Login System Example\" style=\"max-width:100%;height:auto;border-radius:10px;\"><img src=\"Signin.png\" alt=\"Sign-In System Example\" style=\"max-width:100%;height:auto;border-radius:10px;\"><h3>CRUD / POS System</h3><p>We will also learn how to build a CRUD and POS system for managing information and transactions.</p><img src=\"pos.png\" alt=\"CRUD / POS System Example\" style=\"max-width:100%;height:auto;border-radius:10px;\"><h3>What We Will Learn</h3><p>We will learn how <strong>HTML</strong> creates the structure of a website, how <strong>CSS</strong> controls its appearance, and how <strong>JavaScript</strong> adds functionality and interaction.</p><p>By combining these three technologies, we can create complete and useful web applications.</p>"
+    }
+  ]
+}
