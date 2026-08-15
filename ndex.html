@@ -1,0 +1,1919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<meta name="theme-color" content="#0f1115">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Learn</title>
+<style>
+:root {
+  --bg: #0f1115;
+  --panel: #171a21;
+  --panel-2: #1d2230;
+  --text: #e8eaf0;
+  --muted: #a9b0c0;
+  --accent: #6ea8fe;
+  --accent-2: #8bd3ff;
+  --border: rgba(255,255,255,.10);
+  --shadow: 0 8px 24px rgba(0,0,0,.22);
+  --radius: 16px;
+  --max-width: 1100px;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+button,a {
+  font: inherit;
+}
+
+.app {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 16px;
+  padding-bottom: 48px;
+}
+
+.header {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 16px;
+  box-shadow: var(--shadow);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.4rem,3vw,2.2rem);
+  font-weight: 800;
+  letter-spacing: .3px;
+  color: #fff;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+.section {
+  margin-top: 16px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.section-head {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.section-head h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 750;
+  letter-spacing: .2px;
+}
+
+.section-body {
+  padding: 16px;
+}
+
+.data-group {
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--panel-2);
+}
+
+.data-group:last-child {
+  margin-bottom: 0;
+}
+
+.data-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 14px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: background .15s ease,border-color .15s ease;
+}
+
+.data-header:hover {
+  background: #22283a;
+}
+
+.data-group.active {
+  border-color: rgba(110,168,254,.75);
+}
+
+.data-group.active > .data-header {
+  background: rgba(110,168,254,.10);
+}
+
+.data-arrow {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  font-size: .8rem;
+  transition: transform .15s ease;
+}
+
+.data-group.open .data-arrow {
+  transform: rotate(90deg);
+}
+
+.data-title {
+  font-size: .98rem;
+  font-weight: 750;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.data-contents {
+  display: none;
+  padding: 0 10px 10px;
+}
+
+.data-group.open .data-contents {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 8px;
+}
+
+.toc-item {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  color: var(--text);
+  text-decoration: none;
+  background: #22283a;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  min-height: 58px;
+  transition: transform .15s ease,border-color .15s ease,background .15s ease;
+  cursor: pointer;
+  text-align: left;
+}
+
+.toc-item:hover {
+  transform: translateY(-1px);
+  border-color: rgba(110,168,254,.45);
+  background: #2a3248;
+}
+
+.toc-item:active {
+  transform: translateY(0);
+}
+
+.toc-item.active {
+  border-color: rgba(110,168,254,.8);
+  background: rgba(110,168,254,.14);
+}
+
+.toc-index {
+  display: block;
+  font-size: .75rem;
+  color: var(--accent-2);
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.toc-title {
+  display: block;
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.reader-nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 13px;
+  background: #22283a;
+  color: var(--text);
+  cursor: pointer;
+  transition: background .15s ease,border-color .15s ease,transform .1s ease,opacity .15s ease;
+  min-height: 40px;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: #2a3248;
+  border-color: rgba(110,168,254,.5);
+}
+
+.nav-btn:active:not(:disabled) {
+  transform: scale(.97);
+}
+
+.nav-btn:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.reader-meta {
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-size: .92rem;
+}
+
+.reader-card {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  contain: content;
+  min-height: 360px;
+}
+
+.card {
+  background: var(--panel-2);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,.025);
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.card-body {
+  padding: 16px;
+  color: var(--text);
+}
+
+.card-body p {
+  margin: 0 0 10px;
+}
+
+.card-body p:last-child {
+  margin-bottom: 0;
+}
+
+.content-block {
+  margin-top: 0;
+  overflow-x: auto;
+}
+
+.content-block pre {
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(0,0,0,.25);
+  border: 1px solid rgba(255,255,255,.08);
+  overflow-x: auto;
+}
+
+.content-block code {
+  font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  font-size: .92rem;
+  word-break: break-word;
+  user-select: none;
+}
+
+.content-block blockquote {
+  margin: 12px 0;
+  padding: 10px 14px;
+  border-left: 3px solid var(--accent);
+  background: rgba(110,168,254,.06);
+  color: var(--muted);
+}
+
+.content-block table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: .92rem;
+}
+
+.content-block th,
+.content-block td {
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid var(--border);
+}
+
+.content-block th {
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  font-weight: 800;
+}
+
+.content-block td {
+  background: rgba(0,0,0,.08);
+  color: var(--text);
+}
+
+.content-block tr:nth-child(even) td {
+  background: rgba(255,255,255,.025);
+}
+
+.content-block table th,
+.content-block table td {
+  min-width: 120px;
+}
+
+.content-block a {
+  color: var(--accent-2);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(139,211,255,.35);
+  transition: color .15s ease,border-color .15s ease,background .15s ease;
+  border-radius: 4px;
+  padding: 1px 3px;
+}
+
+.content-block a:hover {
+  color: #fff;
+  background: rgba(110,168,254,.10);
+  border-bottom-color: var(--accent);
+}
+
+.content-block a:active {
+  background: rgba(110,168,254,.16);
+}
+
+.content-block a:visited {
+  color: #b9a7ff;
+  border-bottom-color: rgba(185,167,255,.35);
+}
+
+.content-block a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.content-block button {
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 8px 13px;
+  background: #22283a;
+  color: var(--text);
+  cursor: pointer;
+  transition: background .15s ease,border-color .15s ease,transform .1s ease;
+}
+
+.content-block button:hover {
+  background: #2a3248;
+  border-color: rgba(110,168,254,.5);
+}
+
+.content-block button:active {
+  transform: scale(.97);
+}
+
+.iframe-wrapper {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.iframe-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.run-iframe,
+.reload-iframe {
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 7px 13px;
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+  font-size: .88rem;
+  transition: background .15s ease,border-color .15s ease,transform .1s ease;
+}
+
+.run-iframe:hover,
+.reload-iframe:hover {
+  background: #22283a;
+  border-color: rgba(110,168,254,.5);
+}
+
+.run-iframe:active,
+.reload-iframe:active {
+  transform: scale(.97);
+}
+
+.iframe-wrapper iframe {
+  display: block;
+  width: 100%;
+  min-width: 320px;
+  max-width: 1100px;
+  min-height: 500px;
+  border: 0;
+}
+
+.run-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000000;
+  display: none;
+  width: 100vw;
+  height: 100dvh;
+  background: #000;
+}
+
+.run-fullscreen.open {
+  display: block;
+}
+
+.run-fullscreen iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
+
+.run-fullscreen-close {
+  position: fixed;
+  top: max(10px,env(safe-area-inset-top));
+  right: max(10px,env(safe-area-inset-right));
+  z-index: 1000001;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 50%;
+  background: rgba(15,17,21,.82);
+  color: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.run-fullscreen-close:hover {
+  background: rgba(35,40,58,.95);
+}
+
+.run-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 1000000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  color: #fff;
+  font-family: system-ui,sans-serif;
+}
+
+.run-loading.show {
+  display: flex;
+}
+
+.run-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(0,0,0,.68);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.run-modal-overlay.open {
+  display: flex;
+}
+
+.run-modal {
+  width: 100%;
+  max-width: 430px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.45);
+  overflow: hidden;
+  animation: modalIn .16s ease-out;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.run-modal-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.run-modal-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.run-modal-header p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.run-modal-body {
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.run-option {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 13px 14px;
+  background: var(--panel-2);
+  color: var(--text);
+  cursor: pointer;
+  transition: background .15s ease,border-color .15s ease,transform .1s ease;
+}
+
+.run-option:hover {
+  background: #22283a;
+  border-color: rgba(110,168,254,.5);
+}
+
+.run-option:active {
+  transform: scale(.985);
+}
+
+.run-option-title {
+  display: block;
+  font-weight: 750;
+  margin-bottom: 2px;
+}
+
+.run-option-description {
+  display: block;
+  color: var(--muted);
+  font-size: .84rem;
+  line-height: 1.4;
+}
+
+.run-modal-footer {
+  padding: 12px 16px 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.run-cancel {
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 8px 14px;
+  background: #22283a;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.run-cancel:hover {
+  background: #2a3248;
+}
+
+.empty-state {
+  width: 100%;
+  color: var(--muted);
+  text-align: center;
+  padding: 22px 12px;
+  border: 1px dashed rgba(255,255,255,.14);
+  border-radius: 12px;
+  background: rgba(255,255,255,.02);
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.06);
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);
+  animation: shimmer 1.15s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.sk-line {
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.07);
+  margin: 10px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.sk-line.short {
+  width: 55%;
+}
+
+.sk-line.med {
+  width: 75%;
+}
+
+.sk-line.long {
+  width: 92%;
+}
+
+.sk-title {
+  height: 18px;
+  width: 38%;
+  border-radius: 999px;
+  background: rgba(255,255,255,.10);
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.sk-box {
+  height: 120px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.05);
+  margin: 12px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+@media(max-width:720px) {
+  .app {
+    padding: 12px;
+    padding-bottom: 28px;
+  }
+
+  .header {
+    padding: 14px;
+  }
+
+  .section {
+    margin-top: 12px;
+  }
+
+  .section-body,
+  .card-body {
+    padding: 14px;
+  }
+
+  .data-group.open .data-contents {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+
+  .toc-item {
+    min-height: 58px;
+    padding: 10px;
+  }
+
+  .toc-title {
+    font-size: .84rem;
+  }
+
+  .content-block button,
+  .nav-btn {
+    min-height: 40px;
+  }
+
+  .content-block table {
+    min-width: 420px;
+  }
+
+  .content-block th,
+  .content-block td {
+    padding: 9px 10px;
+  }
+
+  .reader-card {
+    min-height: 320px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="header">
+<h1 class="title" id="pageTitle">Website Learning</h1>
+<p class="subtitle" id="pageSubtitle">Select a lesson to begin</p>
+</header>
+
+<section class="section" aria-labelledby="tocHeading">
+<div class="section-head">
+<h2 id="tocHeading">Table of Contents</h2>
+</div>
+<div class="section-body">
+<div id="tocGrid">
+<div class="empty-state">Loading...</div>
+</div>
+</div>
+</section>
+
+<section class="section" aria-labelledby="contentHeading">
+<div class="section-head">
+<h2 id="contentHeading">Contents</h2>
+</div>
+<div class="section-start"></div>
+<div class="section-body">
+<div class="reader-meta" id="readerMeta">Loading...</div>
+<div class="reader-card" id="readerCard">
+<div class="empty-state">Loading...</div>
+</div>
+<br>
+<div class="reader-nav">
+<button class="nav-btn" id="prevBtn" type="button">◀ Previous</button>
+<button class="nav-btn" id="nextBtn" type="button">Next ▶</button>
+</div>
+</div>
+</section>
+</div>
+
+<div class="run-modal-overlay" id="runModalOverlay" aria-hidden="true">
+<div class="run-modal" role="dialog" aria-modal="true" aria-labelledby="runModalTitle">
+<div class="run-modal-header">
+<h3 id="runModalTitle">Run Example</h3>
+<p>Where would you like to run this example?</p>
+</div>
+<div class="run-modal-body">
+<button class="run-option" id="runHereBtn" type="button">
+<span class="run-option-title">▶ Run here</span>
+<span class="run-option-description">Get the editor's current HTML and run it fullscreen.</span>
+</button>
+<button class="run-option" id="runNewTabBtn" type="button">
+<span class="run-option-title">↗ Run in new tab</span>
+<span class="run-option-description">Get the editor's current HTML and open it in a new tab.</span>
+</button>
+</div>
+<div class="run-modal-footer">
+<button class="run-cancel" id="runCancelBtn" type="button">Cancel</button>
+</div>
+</div>
+</div>
+
+<div class="run-fullscreen" id="runFullscreen">
+<button class="run-fullscreen-close" id="runFullscreenClose" type="button" aria-label="Close">×</button>
+<div class="run-loading" id="runLoading">Loading...</div>
+<iframe id="runFullscreenFrame" title="Running example" allow="fullscreen"></iframe>
+</div>
+
+<script>
+let dataFiles = [];
+let contents = [];
+let currentIndex = 0;
+let currentFileIndex = 0;
+let pendingIframe = null;
+
+const pageTitleEl = document.getElementById("pageTitle");
+const pageSubtitleEl = document.getElementById("pageSubtitle");
+const tocGridEl = document.getElementById("tocGrid");
+const readerMetaEl = document.getElementById("readerMeta");
+const readerCardEl = document.getElementById("readerCard");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const runModalOverlay = document.getElementById("runModalOverlay");
+const runHereBtn = document.getElementById("runHereBtn");
+const runNewTabBtn = document.getElementById("runNewTabBtn");
+const runCancelBtn = document.getElementById("runCancelBtn");
+const runFullscreen = document.getElementById("runFullscreen");
+const runFullscreenFrame = document.getElementById("runFullscreenFrame");
+const runFullscreenClose = document.getElementById("runFullscreenClose");
+const runLoading = document.getElementById("runLoading");
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function clamp(n,min,max) {
+  return Math.max(min,Math.min(max,n));
+}
+
+function parseHash() {
+  const match = String(location.hash || "").match(/section-(\d+)-(\d+)/i);
+
+  if (!match) {
+    return null;
+  }
+
+  const file = Number(match[1]) - 1;
+  const item = Number(match[2]) - 1;
+
+  if (!Number.isFinite(file) || !Number.isFinite(item)) {
+    return null;
+  }
+
+  return {
+    file,
+    item
+  };
+}
+
+function skeletonMarkup() {
+  return `
+<article class="card">
+<div class="card-header">
+<div class="sk-title skeleton"></div>
+</div>
+<div class="card-body">
+<div class="skeleton sk-line long"></div>
+<div class="skeleton sk-line med"></div>
+<div class="skeleton sk-line short"></div>
+<div class="skeleton sk-box"></div>
+<div class="skeleton sk-line long"></div>
+<div class="skeleton sk-line med"></div>
+</div>
+</article>
+`;
+}
+
+function buildCardMarkup(title,html,index) {
+  return `
+<article class="card" id="card-${index + 1}">
+<div class="card-header">
+<h3>${escapeHtml(title || `Section ${index + 1}`)}</h3>
+</div>
+<div class="card-body">
+<div class="content-block">
+${html || ""}
+</div>
+</div>
+</article>
+`;
+}
+
+function getCurrentFile() {
+  return dataFiles[currentFileIndex] || null;
+}
+
+function getCurrentItem() {
+  const file = getCurrentFile();
+
+  return file?.Contents?.[currentIndex] || null;
+}
+
+function getGlobalIndex(fileIndex,itemIndex) {
+  let index = 0;
+
+  for (let i = 0; i < fileIndex; i++) {
+    index += (dataFiles[i].Contents || []).length;
+  }
+
+  return index + itemIndex;
+}
+
+function getTotalItems() {
+  return dataFiles.reduce(
+    (total,file) => total + (
+      Array.isArray(file.Contents)
+        ? file.Contents.length
+        : 0
+    ),
+    0
+  );
+}
+
+function getItemByGlobalIndex(index) {
+  let count = 0;
+
+  for (let fileIndex = 0; fileIndex < dataFiles.length; fileIndex++) {
+    const items = dataFiles[fileIndex].Contents || [];
+
+    if (index < count + items.length) {
+      return {
+        fileIndex,
+        itemIndex: index - count
+      };
+    }
+
+    count += items.length;
+  }
+
+  return null;
+}
+
+function openRunModal(iframe) {
+  pendingIframe = iframe;
+  runModalOverlay.classList.add("open");
+  runModalOverlay.setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeRunModal() {
+  pendingIframe = null;
+  runModalOverlay.classList.remove("open");
+  runModalOverlay.setAttribute("aria-hidden","true");
+  document.body.style.overflow = "";
+}
+
+function getIframeFallbackContent(iframe) {
+  if (!iframe) {
+    return null;
+  }
+
+  if (iframe.dataset.srcdoc) {
+    return iframe.dataset.srcdoc;
+  }
+
+  return null;
+}
+
+function requestEditorContent(iframe) {
+  return new Promise((resolve,reject) => {
+    if (!iframe || !iframe.contentWindow) {
+      reject(new Error("Invalid editor iframe."));
+      return;
+    }
+
+    let finished = false;
+
+    const timeout = setTimeout(() => {
+      finish();
+      reject(new Error("Editor did not respond."));
+    },3000);
+
+    function finish() {
+      if (finished) {
+        return;
+      }
+
+      finished = true;
+      clearTimeout(timeout);
+      window.removeEventListener("message",onMessage);
+    }
+
+    function onMessage(event) {
+      if (event.source !== iframe.contentWindow) {
+        return;
+      }
+
+      const data = event.data;
+
+      if (!data || typeof data !== "object") {
+        return;
+      }
+
+      if (data.type !== "EDITOR_CONTENT") {
+        return;
+      }
+
+      if (typeof data.content !== "string") {
+        return;
+      }
+
+      finish();
+      resolve(data.content);
+    }
+
+    window.addEventListener("message",onMessage);
+
+    try {
+      iframe.contentWindow.postMessage(
+        {
+          type: "EDITOR_GET_CONTENT"
+        },
+        "*"
+      );
+    } catch (err) {
+      finish();
+      reject(err);
+    }
+  });
+}
+
+function showFullscreenRunner() {
+  runFullscreen.classList.add("open");
+  runFullscreenFrame.style.display = "block";
+  runLoading.classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+
+function hideFullscreenRunner() {
+  runFullscreen.classList.remove("open");
+  runLoading.classList.remove("show");
+  runFullscreenFrame.srcdoc = "";
+  runFullscreenFrame.removeAttribute("src");
+  document.body.style.overflow = "";
+}
+
+function injectEruda(html) {
+  const eruda = `
+  <scr\ipt src="eruda.min.js"></s\cript>
+  <s\cript>
+    eruda.init();
+  </scr\ipt>`;
+
+  return eruda + (html || "");
+}
+
+function runHtmlHere(html) {
+  if (typeof html !== "string") {
+    alert("The iframe did not return valid HTML.");
+    return;
+  }
+
+  showFullscreenRunner();
+
+  runFullscreenFrame.srcdoc = injectEruda(html);
+
+  runFullscreenFrame.onload = () => {
+    runLoading.classList.remove("show");
+
+    try {
+      runFullscreenFrame.contentWindow.focus();
+    } catch (err) {}
+  };
+}
+
+function runHtmlInNewTab(html) {
+  if (typeof html !== "string") {
+    alert("The iframe did not return valid HTML.");
+    return;
+  }
+
+  html = injectEruda(html);
+
+  const blob = new Blob([html], {
+    type: "text/html;charset=utf-8"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const newWindow = window.open(url, "_blank");
+
+  if (!newWindow) {
+    URL.revokeObjectURL(url);
+    alert("The browser blocked the new tab. Please allow pop-ups for this site.");
+    return;
+  }
+
+  setTimeout(() => {
+    URL.revokeObjectURL(url);
+  }, 60000);
+}
+async function runIframeHere(iframe) {
+  if (!iframe) {
+    return;
+  }
+
+  try {
+    runHtmlHere(
+      await requestEditorContent(iframe)
+    );
+  } catch (err) {
+    const fallback = getIframeFallbackContent(iframe);
+
+    if (fallback !== null) {
+      runHtmlHere(fallback);
+      return;
+    }
+
+    const src =
+      iframe.dataset.originalSrc ||
+      iframe.getAttribute("src");
+
+    if (src) {
+      showFullscreenRunner();
+
+      runFullscreenFrame.src = src;
+
+      runFullscreenFrame.onload = () => {
+        runLoading.classList.remove("show");
+      };
+
+      return;
+    }
+
+    alert(
+      "This iframe did not respond and has no fallback content."
+    );
+  }
+}
+
+async function runIframeInNewTab(iframe) {
+  if (!iframe) {
+    return;
+  }
+
+  try {
+    runHtmlInNewTab(
+      await requestEditorContent(iframe)
+    );
+  } catch (err) {
+    const fallback = getIframeFallbackContent(iframe);
+
+    if (fallback !== null) {
+      runHtmlInNewTab(fallback);
+      return;
+    }
+
+    const src =
+      iframe.dataset.originalSrc ||
+      iframe.getAttribute("src");
+
+    if (src) {
+      window.open(
+        src,
+        "_blank",
+        "noopener,noreferrer"
+      );
+
+      return;
+    }
+
+    alert(
+      "This iframe did not respond and has no fallback content."
+    );
+  }
+}
+
+function addIframeRunButtons(container) {
+  const iframes = container.querySelectorAll("iframe");
+
+  iframes.forEach(iframe => {
+    if (
+      iframe.parentElement?.classList.contains(
+        "iframe-wrapper"
+      )
+    ) {
+      return;
+    }
+
+    const originalSrc =
+      iframe.getAttribute("src");
+
+    const originalSrcdoc =
+      iframe.getAttribute("srcdoc");
+
+    if (originalSrc) {
+      iframe.dataset.originalSrc = originalSrc;
+    }
+
+    if (originalSrcdoc) {
+      iframe.dataset.srcdoc = originalSrcdoc;
+      iframe.removeAttribute("srcdoc");
+    }
+
+    const wrapper =
+      document.createElement("div");
+
+    wrapper.className = "iframe-wrapper";
+
+    const controls =
+      document.createElement("div");
+
+    controls.className = "iframe-controls";
+
+    /* RUN BUTTON */
+    const runButton =
+      document.createElement("button");
+
+    runButton.className = "run-iframe";
+    runButton.type = "button";
+    runButton.textContent = "▶ Run";
+
+    runButton.addEventListener("click",() => {
+      openRunModal(iframe);
+    });
+
+    /* RELOAD BUTTON */
+    const reloadButton =
+      document.createElement("button");
+
+    reloadButton.className = "reload-iframe";
+    reloadButton.type = "button";
+    reloadButton.textContent = "↻ Reload";
+
+    reloadButton.addEventListener("click",() => {
+      try {
+        if (iframe.dataset.srcdoc) {
+          iframe.srcdoc = iframe.dataset.srcdoc;
+          return;
+        }
+
+        const src =
+          iframe.dataset.originalSrc ||
+          iframe.getAttribute("src");
+
+        if (src) {
+          iframe.src = src;
+          return;
+        }
+
+        iframe.contentWindow.location.reload();
+      } catch (err) {
+        try {
+          iframe.contentWindow.location.reload();
+        } catch (reloadErr) {
+          console.error(
+            "Could not reload iframe:",
+            reloadErr
+          );
+        }
+      }
+    });
+
+    iframe.parentNode.insertBefore(
+      wrapper,
+      iframe
+    );
+
+    wrapper.appendChild(controls);
+
+    controls.appendChild(runButton);
+    controls.appendChild(reloadButton);
+
+    wrapper.appendChild(iframe);
+  });
+}
+
+function renderTOC() {
+  tocGridEl.innerHTML = "";
+
+  if (!dataFiles.length) {
+    tocGridEl.innerHTML = `
+<div class="empty-state">
+No contents yet.
+</div>
+`;
+
+    return;
+  }
+
+  dataFiles.forEach((file,fileIndex) => {
+    const group =
+      document.createElement("div");
+
+    group.className = "data-group";
+    group.dataset.fileIndex =
+      String(fileIndex);
+
+    const header =
+      document.createElement("button");
+
+    header.type = "button";
+    header.className = "data-header";
+
+    header.innerHTML = `
+<span class="data-arrow">▶</span>
+<span class="data-title">
+${escapeHtml(file.Title || `Data ${fileIndex + 1}`)}
+</span>
+`;
+
+    const children =
+      document.createElement("div");
+
+    children.className = "data-contents";
+
+    const items =
+      Array.isArray(file.Contents)
+        ? file.Contents
+        : [];
+
+    items.forEach((item,itemIndex) => {
+      const button =
+        document.createElement("button");
+
+      button.type = "button";
+      button.className = "toc-item";
+
+      button.dataset.fileIndex =
+        String(fileIndex);
+
+      button.dataset.itemIndex =
+        String(itemIndex);
+
+      button.innerHTML = `
+<span class="toc-index">
+${itemIndex + 1}
+</span>
+<span class="toc-title">
+${escapeHtml(
+  item?.Title ||
+  `Section ${itemIndex + 1}`
+)}
+</span>
+`;
+
+      button.addEventListener("click",() => {
+        goToSection(
+          fileIndex,
+          itemIndex,
+          true
+        );
+      });
+
+      children.appendChild(button);
+    });
+
+    header.addEventListener("click",() => {
+      const isOpen =
+        group.classList.contains("open");
+
+      document
+        .querySelectorAll(".data-group.open")
+        .forEach(other => {
+          if (other !== group) {
+            other.classList.remove("open");
+          }
+        });
+
+      group.classList.toggle(
+        "open",
+        !isOpen
+      );
+    });
+
+    group.appendChild(header);
+    group.appendChild(children);
+
+    tocGridEl.appendChild(group);
+  });
+
+  updateTOC();
+}
+
+function updateTOC() {
+  document
+    .querySelectorAll(".data-group")
+    .forEach(group => {
+      const fileIndex =
+        Number(group.dataset.fileIndex);
+
+      const active =
+        fileIndex === currentFileIndex;
+
+      group.classList.toggle(
+        "active",
+        active
+      );
+
+      if (active) {
+        group.classList.add("open");
+      } else {
+        group.classList.remove("open");
+      }
+    });
+
+  document
+    .querySelectorAll(".toc-item")
+    .forEach(item => {
+      const fileIndex =
+        Number(item.dataset.fileIndex);
+
+      const itemIndex =
+        Number(item.dataset.itemIndex);
+
+      item.classList.toggle(
+        "active",
+        fileIndex === currentFileIndex &&
+        itemIndex === currentIndex
+      );
+    });
+}
+
+function updateNav() {
+  const globalIndex =
+    getGlobalIndex(
+      currentFileIndex,
+      currentIndex
+    );
+
+  const total =
+    getTotalItems();
+
+  prevBtn.disabled =
+    globalIndex <= 0;
+
+  nextBtn.disabled =
+    globalIndex >= total - 1;
+}
+
+function updateMeta() {
+  const total =
+    getTotalItems();
+
+  if (!total) {
+    readerMetaEl.textContent =
+      "No sections loaded.";
+
+    return;
+  }
+
+  const item =
+    getCurrentItem();
+
+  const title =
+    item?.Title ||
+    `Section ${currentIndex + 1}`;
+
+  readerMetaEl.textContent =
+    `Section ${
+      getGlobalIndex(
+        currentFileIndex,
+        currentIndex
+      ) + 1
+    } of ${total} • ${title}`;
+}
+
+function renderSkeleton() {
+  readerCardEl.innerHTML =
+    skeletonMarkup();
+}
+
+function renderSection() {
+  const item =
+    getCurrentItem();
+
+  if (!item) {
+    readerCardEl.innerHTML = `
+<div class="empty-state">
+No cards yet.
+</div>
+`;
+
+    updateMeta();
+    updateNav();
+    updateTOC();
+
+    return;
+  }
+
+  renderSkeleton();
+
+  requestAnimationFrame(() => {
+    readerCardEl.innerHTML =
+      buildCardMarkup(
+        item.Title,
+        item.Contents,
+        currentIndex
+      );
+
+    addIframeRunButtons(
+      readerCardEl
+    );
+
+    updateMeta();
+    updateNav();
+    updateTOC();
+  });
+}
+
+function goToSection(
+  fileIndex,
+  itemIndex,
+  updateHash
+) {
+  const file =
+    dataFiles[fileIndex];
+
+  if (
+    !file ||
+    !Array.isArray(file.Contents) ||
+    !file.Contents.length
+  ) {
+    return;
+  }
+
+  currentFileIndex =
+    fileIndex;
+
+  currentIndex =
+    clamp(
+      itemIndex,
+      0,
+      file.Contents.length - 1
+    );
+
+  if (updateHash) {
+    const hash =
+      `#section-${
+        currentFileIndex + 1
+      }-${
+        currentIndex + 1
+      }`;
+
+    if (location.hash !== hash) {
+      history.replaceState(
+        null,
+        "",
+        hash
+      );
+    }
+  }
+
+  renderSection();
+}
+
+function goToGlobalIndex(
+  index,
+  updateHash
+) {
+  const target =
+    getItemByGlobalIndex(index);
+
+  if (!target) {
+    return;
+  }
+
+  goToSection(
+    target.fileIndex,
+    target.itemIndex,
+    updateHash
+  );
+}
+
+function renderPage() {
+  if (!dataFiles.length) {
+    pageTitleEl.textContent =
+      "Website Learning";
+
+    pageSubtitleEl.textContent =
+      "No data files found";
+
+    tocGridEl.innerHTML = `
+<div class="empty-state">
+No contents yet.
+</div>
+`;
+
+    readerCardEl.innerHTML = `
+<div class="empty-state">
+No contents yet.
+</div>
+`;
+
+    return;
+  }
+
+  pageTitleEl.textContent =
+    dataFiles[0].Title ||
+    "Website Learning";
+
+  pageSubtitleEl.textContent =
+    `${dataFiles.length} lesson${
+      dataFiles.length === 1
+        ? ""
+        : "s"
+    } loaded`;
+
+  renderTOC();
+
+  const hash =
+    parseHash();
+
+  if (
+    hash &&
+    dataFiles[hash.file]?.Contents?.[hash.item]
+  ) {
+    currentFileIndex =
+      hash.file;
+
+    currentIndex =
+      hash.item;
+  } else {
+    currentFileIndex = 0;
+    currentIndex = 0;
+  }
+
+  history.replaceState(
+    null,
+    "",
+    `#section-${
+      currentFileIndex + 1
+    }-${
+      currentIndex + 1
+    }`
+  );
+
+  renderSection();
+}
+
+async function loadData() {
+  dataFiles = [];
+
+  let i = 1;
+
+  while (true) {
+    try {
+      const res =
+        await fetch(
+          `Data/data${i}.json`,
+          {
+            cache: "no-store"
+          }
+        );
+
+      if (!res.ok) {
+        break;
+      }
+
+      const data =
+        await res.json();
+
+      if (
+        data &&
+        Array.isArray(data.Contents)
+      ) {
+        dataFiles.push({
+          Title:
+            data.Title ||
+            `Data ${i}`,
+          Contents:
+            data.Contents
+        });
+      }
+
+      i++;
+    } catch (err) {
+      console.log(
+        `Stopped loading at data${i}.json`,
+        err
+      );
+
+      break;
+    }
+  }
+
+  renderPage();
+}
+
+function scrollToContent() {
+  const contentSection = readerCardEl.closest(".section");
+
+  if (!contentSection) {
+    return;
+  }
+
+  const y =
+    contentSection.getBoundingClientRect().top +
+    window.scrollY -
+    10;
+
+  window.scrollTo({
+    top: Math.max(0, y),
+    behavior: "smooth"
+  });
+}
+
+prevBtn.addEventListener(
+  "click",
+  () => {
+    const globalIndex =
+      getGlobalIndex(
+        currentFileIndex,
+        currentIndex
+      );
+
+    if (globalIndex > 0) {
+      goToGlobalIndex(
+        globalIndex - 1,
+        true
+      );
+
+      requestAnimationFrame(() => {
+        scrollToContent();
+      });
+    }
+  }
+);
+
+nextBtn.addEventListener(
+  "click",
+  () => {
+    const globalIndex =
+      getGlobalIndex(
+        currentFileIndex,
+        currentIndex
+      );
+
+    if (
+      globalIndex <
+      getTotalItems() - 1
+    ) {
+      goToGlobalIndex(
+        globalIndex + 1,
+        true
+      );
+
+      requestAnimationFrame(() => {
+        scrollToContent();
+      });
+    }
+  }
+);
+
+window.addEventListener(
+  "hashchange",
+  () => {
+    const hash =
+      parseHash();
+
+    if (!hash) {
+      return;
+    }
+
+    if (
+      dataFiles[hash.file]?.Contents?.[hash.item]
+    ) {
+      currentFileIndex =
+        hash.file;
+
+      currentIndex =
+        hash.item;
+
+      renderSection();
+    }
+  }
+);
+
+document.addEventListener(
+  "keydown",
+  e => {
+    const tag =
+      document.activeElement?.tagName;
+
+    if (
+      tag === "INPUT" ||
+      tag === "TEXTAREA" ||
+      tag === "SELECT"
+    ) {
+      return;
+    }
+
+    const globalIndex =
+      getGlobalIndex(
+        currentFileIndex,
+        currentIndex
+      );
+
+    if (
+      e.key === "ArrowLeft" &&
+      globalIndex > 0
+    ) {
+      goToGlobalIndex(
+        globalIndex - 1,
+        true
+      );
+    } else if (
+      e.key === "ArrowRight" &&
+      globalIndex <
+      getTotalItems() - 1
+    ) {
+      goToGlobalIndex(
+        globalIndex + 1,
+        true
+      );
+    } else if (
+      e.key === "Escape"
+    ) {
+      if (
+        runModalOverlay.classList.contains(
+          "open"
+        )
+      ) {
+        closeRunModal();
+      }
+
+      if (
+        runFullscreen.classList.contains(
+          "open"
+        )
+      ) {
+        hideFullscreenRunner();
+      }
+    }
+  }
+);
+
+runHereBtn.addEventListener(
+  "click",
+  async () => {
+    const iframe =
+      pendingIframe;
+
+    closeRunModal();
+
+    if (iframe) {
+      await runIframeHere(iframe);
+    }
+  }
+);
+
+runNewTabBtn.addEventListener(
+  "click",
+  async () => {
+    const iframe =
+      pendingIframe;
+
+    closeRunModal();
+
+    if (iframe) {
+      await runIframeInNewTab(iframe);
+    }
+  }
+);
+
+runCancelBtn.addEventListener(
+  "click",
+  closeRunModal
+);
+
+runModalOverlay.addEventListener(
+  "click",
+  e => {
+    if (
+      e.target ===
+      runModalOverlay
+    ) {
+      closeRunModal();
+    }
+  }
+);
+
+runFullscreenClose.addEventListener(
+  "click",
+  hideFullscreenRunner
+);
+
+document.addEventListener(
+  "DOMContentLoaded",
+  loadData
+);
+</script>
+</body>
+</html>

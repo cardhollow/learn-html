@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Runner</title>
+
+<style>
+html,body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:white;
+}
+
+#frame{
+    display:block;
+    width:100%;
+    height:100%;
+    border:0;
+    margin:0;
+    padding:0;
+}
+</style>
+</head>
+
+<body>
+
+<iframe
+    id="frame"
+    sandbox="allow-scripts allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox">
+</iframe>
+
+
+<script>
+
+const frame =
+    document.getElementById("frame");
+
+const PREVIEW_KEY =
+    "htmlcompiler_preview_code";
+
+
+/*
+    runner.html itself contains NO
+    preview UI.
+
+    The actual written HTML completely
+    replaces the iframe document.
+*/
+
+function render(code){
+
+    frame.srcdoc =
+        String(code || "");
+
+}
+
+
+/*
+    When opened directly:
+
+    runner.html?debug=1
+
+    or
+
+    runner.html?debug=0
+
+    The query is only used to choose
+    which locally stored preview content
+    to display.
+
+    It does NOT become part of the
+    rendered HTML.
+*/
+
+function loadStored(){
+
+    const params =
+        new URLSearchParams(
+            location.search
+        );
+
+    const stored =
+        localStorage.getItem(
+            PREVIEW_KEY
+        );
+
+    if(stored !== null){
+
+        render(stored);
+
+        return;
+
+    }
+
+    render("");
+
+}
+
+
+/*
+    Messages from index.html.
+
+    Live mode uses this without opening
+    another tab.
+*/
+
+window.addEventListener(
+    "message",
+    event => {
+
+        const data =
+            event.data || {};
+
+        if(
+            data.type ===
+                "HTMLPG_UPDATE" ||
+            data.type ===
+                "HTMLPG_LOAD"
+        ){
+
+            render(
+                data.code || ""
+            );
+
+        }
+
+    }
+);
+
+
+/*
+    Tell the editor that this runner
+    exists and is ready.
+
+    The editor then sends the current
+    HTML.
+*/
+
+window.addEventListener(
+    "load",
+    () => {
+
+        loadStored();
+
+        if(window.opener){
+
+            try{
+
+                window.opener.postMessage(
+                    {
+                        type:
+                            "HTMLPG_READY"
+                    },
+                    "*"
+                );
+
+            }catch{}
+
+        }
+
+    }
+);
+
+
+/*
+    Offline support.
+*/
+
+if("serviceWorker" in navigator){
+
+    window.addEventListener(
+        "load",
+        () => {
+
+            navigator.serviceWorker
+                .register("./sw.js")
+                .catch(
+                    () => {}
+                );
+
+        }
+    );
+
+}
+
+</script>
+
+</body>
+</html>
