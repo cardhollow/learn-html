@@ -1071,11 +1071,13 @@ function hideFullscreenRunner() {
 }
 
 function injectEruda(html) {
+  const erudaUrl = new URL("eruda.min.js", document.baseURI).href;
+
   const eruda = `
-  <scr\ipt src="eruda.min.js"></s\cript>
-  <s\cript>
-    eruda.init();
-  </scr\ipt>`;
+<scr\ipt src="${erudaUrl}"></s\cript>
+<scr\ipt>
+  eruda.init();
+</scr\ipt>`;
 
   return eruda + (html || "");
 }
@@ -1105,9 +1107,16 @@ function runHtmlInNewTab(html) {
     return;
   }
 
-  html = injectEruda(html);
+  const erudaUrl = new URL("eruda.min.js", document.baseURI).href;
 
-  const blob = new Blob([html], {
+  const injectedHtml = `
+<scr\ipt src="${erudaUrl}"></s\cript>
+<scr\ipt>
+  eruda.init();
+</scr\ipt>
+${html}`;
+
+  const blob = new Blob([injectedHtml], {
     type: "text/html;charset=utf-8"
   });
 
@@ -1124,6 +1133,7 @@ function runHtmlInNewTab(html) {
     URL.revokeObjectURL(url);
   }, 60000);
 }
+  
 async function runIframeHere(iframe) {
   if (!iframe) {
     return;
